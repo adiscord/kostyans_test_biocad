@@ -16,17 +16,30 @@ function chunkString({ str, chunkSize }: { str: string; chunkSize: number }) {
   return chunks;
 }
 
-const Letters = () => {
-  const colorsArr = [
-    "#FFEA00",
-    "#67E4A6",
-    "#C4C4C4",
-    "#FC9CAC",
-    "#BB99FF",
-    "#80BFFF",
-  ];
-  const colorsKeys = ["C", "AILMFWYVP", "G", "DE", "KR", "STHQN"];
+const getCharWidth = (fontFamily = "monospace", fontSize = "18px") => {
+  const span = document.createElement("span");
+  span.style.visibility = "hidden";
+  span.style.whiteSpace = "pre";
+  span.style.fontFamily = fontFamily;
+  span.style.fontSize = fontSize;
+  span.textContent = "W";
+  document.body.appendChild(span);
+  const width = span.offsetWidth;
+  document.body.removeChild(span);
+  return width;
+};
 
+const colorsArr = [
+  "#FFEA00",
+  "#67E4A6",
+  "#C4C4C4",
+  "#FC9CAC",
+  "#BB99FF",
+  "#80BFFF",
+];
+const colorsKeys = ["C", "AILMFWYVP", "G", "DE", "KR", "STHQN"];
+
+const Letters = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
@@ -40,18 +53,6 @@ const Letters = () => {
     targetRef: containerRef,
     onCopy: handleCopy,
   });
-  const getCharWidth = (fontFamily = "monospace", fontSize = "18px") => {
-    const span = document.createElement("span");
-    span.style.visibility = "hidden";
-    span.style.whiteSpace = "pre";
-    span.style.fontFamily = fontFamily;
-    span.style.fontSize = fontSize;
-    span.textContent = "W";
-    document.body.appendChild(span);
-    const width = span.offsetWidth;
-    document.body.removeChild(span);
-    return width;
-  };
 
   let charWidth = getCharWidth();
   let width = useResizing();
@@ -59,28 +60,25 @@ const Letters = () => {
   let context = useContext(inputContext);
 
   let values = context ? context.values : null;
-  let frstValue = values ? values[0] : null;
+  let firstValue = values ? values[0] : null;
   let secondValue = values ? values[1] : null;
 
-  let length = frstValue ? frstValue.length * charWidth : 0;
+  let length = firstValue ? firstValue.length * charWidth : 0;
 
   let charsCount = 0;
 
-  console.log(length, width);
-
   if (width < length) {
     charsCount = Math.floor(width / charWidth);
-    console.log(charsCount);
   }
 
-  console.log(charsCount);
-
-  let frstValueCharsArr = frstValue
-    ? chunkString({ str: frstValue, chunkSize: charsCount })
+  let firstValueCharsArr = firstValue
+    ? chunkString({ str: firstValue, chunkSize: charsCount })
     : null;
   let secondValueCharsArr = secondValue
     ? chunkString({ str: secondValue, chunkSize: charsCount })
     : null;
+
+  console.log(firstValueCharsArr, secondValueCharsArr);
 
   return (
     <>
@@ -101,8 +99,7 @@ const Letters = () => {
           fontSize: "18px",
         }}
       >
-        {frstValueCharsArr?.map((item, index) => {
-          console.log("kurwa");
+        {firstValueCharsArr?.map((item, index) => {
           return (
             <>
               <div key={item}>
@@ -124,30 +121,27 @@ const Letters = () => {
                 })}
               </div>
               <div key={item + index}>
-                {secondValueCharsArr
-                  ? secondValueCharsArr[index]
-                      .split("")
-                      .map((item2, index2) => {
-                        let colorIndex = colorsKeys.findIndex((item) =>
-                          item.includes(item2)
-                        );
-                        console.log(index);
-                        return (
-                          <span
-                            key={item2 + index2}
-                            style={{
-                              display: "inline",
-                              backgroundColor:
-                                item[index2] === item2
-                                  ? colorsArr[colorIndex]
-                                  : "#FFFFFF",
-                            }}
-                          >
-                            {item2}
-                          </span>
-                        );
-                      })
-                  : null}
+                {secondValueCharsArr &&
+                  secondValueCharsArr[index].split("").map((item2, index2) => {
+                    let colorIndex = colorsKeys.findIndex((item) =>
+                      item.includes(item2)
+                    );
+
+                    return (
+                      <span
+                        key={item2 + index2}
+                        style={{
+                          display: "inline",
+                          backgroundColor:
+                            item[index2] === item2
+                              ? colorsArr[colorIndex]
+                              : "#FFFFFF",
+                        }}
+                      >
+                        {item2}
+                      </span>
+                    );
+                  })}
               </div>
             </>
           );

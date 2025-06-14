@@ -26,6 +26,7 @@ export const SequenceContext = ({
   let [firstInput, setFirstInput] = useState<string>("");
   let [secondInput, setSecondInput] = useState<string>("");
   let [values, setValues] = useState<string[]>([]);
+
   const value: inputContextTypes | null = {
     firstInput: firstInput,
     setFirstInput: setFirstInput,
@@ -34,6 +35,7 @@ export const SequenceContext = ({
     values: values,
     setValues: setValues,
   };
+
   return (
     <inputContext.Provider value={value}>{children}</inputContext.Provider>
   );
