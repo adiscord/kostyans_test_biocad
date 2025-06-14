@@ -60,25 +60,36 @@ const Letters = () => {
   let context = useContext(inputContext);
 
   let values = context ? context.values : null;
-  let firstValue = values ? values[0] : null;
-  let secondValue = values ? values[1] : null;
+  // let firstValue = values ? values[0] : null;
+  // let secondValue = values ? values[1] : null;
 
-  let length = firstValue ? firstValue.length * charWidth : 0;
+  // let length = firstValue ? firstValue.length * charWidth : 0;
 
   let charsCount = 0;
 
-  if (width < length) {
-    charsCount = Math.floor(width / charWidth);
-  }
+  // if (width < length) {
+  //   charsCount = Math.floor(width / charWidth);
+  // }
 
-  let firstValueCharsArr = firstValue
-    ? chunkString({ str: firstValue, chunkSize: charsCount })
-    : null;
-  let secondValueCharsArr = secondValue
-    ? chunkString({ str: secondValue, chunkSize: charsCount })
-    : null;
+  // let firstValueCharsArr = firstValue
+  //   ? chunkString({ str: firstValue, chunkSize: charsCount })
+  //   : null;
+  // let secondValueCharsArr = secondValue
+  //   ? chunkString({ str: secondValue, chunkSize: charsCount })
+  //   : null;
 
-  console.log(firstValueCharsArr, secondValueCharsArr);
+  // console.log(firstValueCharsArr, secondValueCharsArr);
+
+  const firstValue =
+    "QWWEQWEQWEWEфывфывQWWEQWEQWEWEфывфывQWWEQWEQWEWEфывфывQWWEQWEQWEWEфывфыв";
+  const secondValue =
+    "QWWEQWEQWEWEqweqweQWWEQWEQWEWEqweqweQWWEQWEQWEWEqweqweQWWEQWEQWEWEqweqwe";
+
+  const commonStyle: React.CSSProperties = {
+    lineHeight: "60px",
+    textWrap: "wrap",
+    wordBreak: "break-all",
+  };
 
   return (
     <>
@@ -97,55 +108,22 @@ const Letters = () => {
           flexWrap: "wrap",
           fontFamily: "monospace",
           fontSize: "18px",
+          position: "relative",
+          textAlign: "left",
         }}
       >
-        {firstValueCharsArr?.map((item, index) => {
-          return (
-            <>
-              <div key={item}>
-                {item.split("").map((item1, index1) => {
-                  let index = colorsKeys.findIndex((item) =>
-                    item.includes(item1)
-                  );
-                  return (
-                    <span
-                      key={item1 + index + index1}
-                      style={{
-                        display: "inline",
-                        backgroundColor: colorsArr[index],
-                      }}
-                    >
-                      {item1}
-                    </span>
-                  );
-                })}
-              </div>
-              <div key={item + index}>
-                {secondValueCharsArr &&
-                  secondValueCharsArr[index].split("").map((item2, index2) => {
-                    let colorIndex = colorsKeys.findIndex((item) =>
-                      item.includes(item2)
-                    );
-
-                    return (
-                      <span
-                        key={item2 + index2}
-                        style={{
-                          display: "inline",
-                          backgroundColor:
-                            item[index2] === item2
-                              ? colorsArr[colorIndex]
-                              : "#FFFFFF",
-                        }}
-                      >
-                        {item2}
-                      </span>
-                    );
-                  })}
-              </div>
-            </>
-          );
-        })}
+        <div
+          style={{
+            ...commonStyle,
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            transform: "translateY(-30px)",
+          }}
+        >
+          {firstValue}
+        </div>
+        <div style={{ ...commonStyle }}>{secondValue}</div>
       </div>
     </>
   );
